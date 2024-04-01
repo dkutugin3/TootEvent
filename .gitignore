@@ -1,3 +1,5 @@
 /.vscode
 /venv
 /backend/__pycache__
+.DS_Store
+/backend/sql_app.db
