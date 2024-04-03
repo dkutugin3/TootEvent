@@ -5,3 +5,4 @@ __pycache__
 /backend/sql_app.db
 /.idea
 backend/.env
+
