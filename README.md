@@ -1,2 +1,4 @@
 # mai-python
-RUN SH FILE
+run:
+    source ./LEEEETSGOOO.sh 
+
