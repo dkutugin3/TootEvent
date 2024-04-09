@@ -1,11 +1,14 @@
 from fastapi import APIRouter, Depends, Response
 
-from app.exceptions import IncorrectEmailOrPasswordException, UserAlreadyExistException
-from app.auth.auth import authenticate_user, create_access_token, get_password_hash
-from app.users.dao import UsersDAO
-from app.auth.dependencies import get_current_user
-from app.users.models import Users
-from app.auth.schemas import SUserRegister, SUserAuth
+from schemas.exceptions import (
+    IncorrectEmailOrPasswordException,
+    UserAlreadyExistException,
+)
+from services.auth import authenticate_user, create_access_token, get_password_hash
+from repositories.users import UsersDAO
+from api.dependencies import get_current_user
+from models.users import Users
+from schemas.auth import SUserRegister, SUserAuth
 
 router = APIRouter(
     prefix="/auth",
@@ -19,7 +22,9 @@ async def register_user(user_data: SUserRegister):
     if existing_user:
         raise UserAlreadyExistException
     hashed_password = get_password_hash(user_data.password)
-    await UsersDAO.add(email=user_data.email, hashed_password=hashed_password, name=user_data.name)
+    await UsersDAO.add(
+        email=user_data.email, hashed_password=hashed_password, name=user_data.name
+    )
 
 
 @router.post("/login")

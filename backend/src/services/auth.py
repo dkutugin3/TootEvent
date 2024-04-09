@@ -1,11 +1,11 @@
-from datetime import datetime, timedelta
+from datetime import datetime, timedelta, UTC
 
 from jose import jwt
 from passlib.context import CryptContext
 from pydantic import EmailStr
 
-from app.config import settings
-from app.users.dao import UsersDAO
+from config import settings
+from repositories.users import UsersDAO
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
@@ -20,11 +20,9 @@ def verify_password(plain_password, hashed_password) -> bool:
 
 def create_access_token(data: dict) -> str:
     to_encode = data.copy()
-    expire = datetime.utcnow() + timedelta(days=30)
+    expire = datetime.now(UTC) + timedelta(days=30)
     to_encode.update({"exp": expire})
-    encoded_jwt = jwt.encode(
-        to_encode, settings.SECRET_KEY, settings.ALGORITHM
-    )
+    encoded_jwt = jwt.encode(to_encode, settings.SECRET_KEY, settings.ALGORITHM)
     return encoded_jwt
 
 

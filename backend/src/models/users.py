@@ -1,7 +1,7 @@
 from sqlalchemy import String, JSON
 from sqlalchemy.orm import Mapped, mapped_column
 
-from app.database import Base
+from db.database import Base
 
 
 class Users(Base):
