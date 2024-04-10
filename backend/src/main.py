@@ -1,5 +1,6 @@
-from fastapi import FastAPI
 import uvicorn
+from fastapi import FastAPI
+
 from api.routers import all_routers
 
 app = FastAPI(title="TootEvent")
