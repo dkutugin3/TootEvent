@@ -1,6 +1,6 @@
 from sqlalchemy import String, JSON
 from sqlalchemy.orm import Mapped, mapped_column
-
+from schemas.users import UserSchema
 from db.database import Base
 
 
@@ -12,3 +12,12 @@ class Users(Base):
     name: Mapped[str] = mapped_column(String(30), nullable=False)
     hashed_password: Mapped[str]
     preferences: Mapped[dict | list | None] = mapped_column(JSON, nullable=True)
+
+    def to_read_model(self) -> UserSchema:
+        return UserSchema(
+            id=self.id,
+            email=self.email,
+            name=self.name,
+            hashed_password=self.hashed_password,
+            preferences=self.preferences,
+        )

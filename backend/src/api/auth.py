@@ -1,14 +1,8 @@
-from fastapi import APIRouter, Depends, Response
+from fastapi import APIRouter, Response, Depends
 
-from schemas.exceptions import (
-    IncorrectEmailOrPasswordException,
-    UserAlreadyExistException,
-)
-from services.auth import authenticate_user, create_access_token, get_password_hash
-from repositories.users import UsersDAO
-from api.dependencies import get_current_user
-from models.users import Users
-from schemas.auth import SUserRegister, SUserAuth
+from schemas.auth import UserRegisterSchema, UserLoginSchema, UserInfoSchema
+from services.auth.dependencies import UOWDep, get_current_user_id
+from services.users import UsersService
 
 router = APIRouter(
     prefix="/auth",
@@ -17,32 +11,23 @@ router = APIRouter(
 
 
 @router.post("/register")
-async def register_user(user_data: SUserRegister):
-    existing_user = await UsersDAO.find_one_or_none(email=user_data.email)
-    if existing_user:
-        raise UserAlreadyExistException
-    hashed_password = get_password_hash(user_data.password)
-    await UsersDAO.add(
-        email=user_data.email, hashed_password=hashed_password, name=user_data.name
-    )
+async def register_user(uow: UOWDep, user_data: UserRegisterSchema, response: Response):
+    await UsersService.register_user(uow=uow, user=user_data, response=response)
+    return {"status": "ok"}
 
 
 @router.post("/login")
-async def login_user(response: Response, user_data: SUserAuth):
-    user = await authenticate_user(user_data.email, user_data.password)
-    if not user:
-        raise IncorrectEmailOrPasswordException
-    access_token = create_access_token({"sub": str(user.id)})
-    response.set_cookie("booking_access_token", access_token, httponly=True)
-    return {"access_token": access_token}
+async def login_user(uow: UOWDep, user_data: UserLoginSchema, response: Response, ):
+    await UsersService.login_user(uow, user_data, response=response)
+    return {"status": "ok"}
 
 
 @router.post("/logout")
 async def logout_user(response: Response):
-    response.delete_cookie("booking_access_token")
-    return {"status": True}
+    UsersService.logout_user(response=response)
+    return {"status": "ok"}
 
 
-@router.get("/me")
-async def read_users_me(current_user: Users = Depends(get_current_user)):
-    return current_user
+@router.get("/info")
+async def get_user_info(uow: UOWDep, user_id: int = Depends(get_current_user_id)) -> UserInfoSchema:
+    return await UsersService.get_user_info(uow=uow, user_id=user_id)
