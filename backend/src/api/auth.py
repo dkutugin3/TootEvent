@@ -17,7 +17,11 @@ async def register_user(uow: UOWDep, user_data: UserRegisterSchema, response: Re
 
 
 @router.post("/login")
-async def login_user(uow: UOWDep, user_data: UserLoginSchema, response: Response, ):
+async def login_user(
+    uow: UOWDep,
+    user_data: UserLoginSchema,
+    response: Response,
+):
     await UsersService.login_user(uow, user_data, response=response)
     return {"status": "ok"}
 
@@ -29,5 +33,7 @@ async def logout_user(response: Response):
 
 
 @router.get("/info")
-async def get_user_info(uow: UOWDep, user_id: int = Depends(get_current_user_id)) -> UserInfoSchema:
+async def get_user_info(
+    uow: UOWDep, user_id: int = Depends(get_current_user_id)
+) -> UserInfoSchema:
     return await UsersService.get_user_info(uow=uow, user_id=user_id)
