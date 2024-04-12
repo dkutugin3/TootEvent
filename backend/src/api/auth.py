@@ -1,7 +1,8 @@
 from fastapi import APIRouter, Response, Depends
 
 from schemas.auth import UserRegisterSchema, UserLoginSchema, UserInfoSchema
-from services.auth.dependencies import UOWDep, get_current_user_id
+from services.auth.dependencies import get_current_user_id
+from utils.dependencies import UOWDep
 from services.users import UsersService
 
 router = APIRouter(

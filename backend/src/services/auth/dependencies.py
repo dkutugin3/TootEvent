@@ -31,6 +31,3 @@ def get_current_user_id(token: str = Depends(get_token)) -> int:
     if not user_id:
         raise UserIsNotPresentException
     return int(user_id)
-
-
-UOWDep = Annotated[AbstractUOW, Depends(UOW)]
