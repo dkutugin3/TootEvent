@@ -1,5 +1,5 @@
 from pydantic import BaseModel
-from sqlalchemy import select, insert, delete
+from sqlalchemy import select, insert, delete, update
 from sqlalchemy.ext.asyncio import AsyncSession
 from repositories.base import AbstractRepo
 from typing import List
@@ -11,8 +11,8 @@ class SqlAlchemyRepo(AbstractRepo):
     def __init__(self, session: AsyncSession) -> None:
         self.session = session
 
-    async def delete_by_id(self, model_id: int) -> None:
-        stmt = delete(self.model).where(id=model_id)
+    async def delete_by_id(self, model_id: int):
+        stmt = delete(self.model).where(self.model.id == model_id)
         await self.session.execute(stmt)
 
     async def find_one(self, **filter_by) -> BaseModel:
@@ -33,3 +33,7 @@ class SqlAlchemyRepo(AbstractRepo):
         stmt = insert(self.model).values(**data).returning(self.model.id)
         result = await self.session.execute(stmt)
         return result.scalar_one()
+
+    async def update_by_id(self, model_id: int, **data):
+        stmt = update(self.model).where(self.model.id == model_id).values(**data)
+        await self.session.execute(stmt)

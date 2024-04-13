@@ -10,10 +10,9 @@ router = APIRouter(
 )
 
 
-# @router.get("/")
-# async def get_events_list(uow: UOWDep, user_data: UserRegisterSchema, response: Response):
-#     await UsersService.register_user(uow=uow, user=user_data, response=response)
-#     return {"status": "ok"}
+@router.get("/")
+async def get_events_list(uow: UOWDep):
+    return await EventsService.get_events_list(uow)
 
 
 @router.post("/")
@@ -28,17 +27,18 @@ async def add_event(
 @router.get("/{event_id}")
 async def get_event_info(
         uow: UOWDep, event_id: int) -> EventInfoSchema:
-    return await EventsService.get_event_info(uow=uow, event_id=event_id)
+    return await EventsService.get_event_info(uow, event_id)
 
 
-# @router.delete("/{event_id}")
-# async def delete_event(response: Response):
-#     UsersService.logout_user(response=response)
-#     return {"status": "ok"}
-#
-#
-# @router.patch("/{event_id}")
-# async def change_event_info(
-#     uow: UOWDep, user_id: int = Depends(get_current_user_id)
-# ) -> UserInfoSchema:
-#     return await UsersService.get_user_info(uow=uow, user_id=user_id)
+@router.delete("/{event_id}")
+async def delete_event(
+        uow: UOWDep, event_id: int):
+    await EventsService.delete_event(uow, event_id)
+    return {"status": "ok"}
+
+
+@router.patch("/{event_id}")
+async def change_event_info(
+        uow: UOWDep, event_id: int, data: dict):
+    await EventsService.change_event_info(uow, event_id, data)
+    return {"status": "ok"}
