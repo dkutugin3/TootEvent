@@ -6,6 +6,8 @@ from utils.unit_of_work import AbstractUOW
 
 from typing import List
 
+from utils.date_manager import DateManager as Dm
+
 
 class EventsService:
     @staticmethod
@@ -15,7 +17,7 @@ class EventsService:
         async with uow:
             event_id = await uow.events.add_one(
                 title=event.title,
-                date=event.date,
+                date=Dm.string_to_date(event.date),
                 price=event.price,
                 genre=event.genre,
                 rating=event.rating,

@@ -4,7 +4,7 @@ from sqlalchemy.orm import Mapped, mapped_column
 from schemas.events import EventSchema
 from db.database import Base
 
-import datetime as dt
+from utils.date_manager import DateManager as Dm
 
 
 class Events(Base):
@@ -22,7 +22,7 @@ class Events(Base):
         return EventSchema(
             id=self.id,
             title=self.title,
-            date=self.date,
+            date=Dm.date_to_string(self.date),
             price=self.price,
             genre=self.genre,
             rating=self.rating,

@@ -41,3 +41,8 @@ class IncorrectTokenFormatExcepetion(BException):
 
 class UserIsNotPresentException(BException):
     status_code = status.HTTP_401_UNAUTHORIZED
+
+
+class AccessForbiddenException(BException):
+    status_code = status.HTTP_403_FORBIDDEN
+    detail = "Доступ запрещён"
