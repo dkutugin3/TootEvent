@@ -23,7 +23,7 @@ class UsersService:
                 raise UserAlreadyExistException
             hashed_password = get_password_hash(user.password)
             user_id = await uow.users.add_one(
-                email=user.email, name=user.name, hashed_password=hashed_password
+                email=user.email, name=user.name, hashed_password=hashed_password, is_moderator=user.is_moderator
             )
             await uow.commit()
             cls.setup_access_token(user_id=user_id, response=response)
@@ -66,3 +66,9 @@ class UsersService:
     def logout_user(response: Response):
         response.delete_cookie("TootEventToken")
         return {"status": "ok"}
+
+    @staticmethod
+    async def user_is_moderator(uow: AbstractUOW, user_id: int) -> bool:
+        async with uow:
+            user = await uow.users.find_one(id=user_id)
+            return user.is_moderator

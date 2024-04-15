@@ -12,6 +12,7 @@ class Users(Base):
     name: Mapped[str] = mapped_column(String(30), nullable=False)
     hashed_password: Mapped[str]
     preferences: Mapped[dict | list | None] = mapped_column(JSON, nullable=True)
+    is_moderator: Mapped[bool] = mapped_column(nullable=False, default=False)
 
     def to_read_model(self) -> UserSchema:
         return UserSchema(
@@ -20,4 +21,5 @@ class Users(Base):
             name=self.name,
             hashed_password=self.hashed_password,
             preferences=self.preferences,
+            is_moderator=self.is_moderator
         )
