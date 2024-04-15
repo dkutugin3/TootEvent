@@ -21,5 +21,5 @@ class Users(Base):
             name=self.name,
             hashed_password=self.hashed_password,
             preferences=self.preferences,
-            is_moderator=self.is_moderator
+            is_moderator=self.is_moderator,
         )

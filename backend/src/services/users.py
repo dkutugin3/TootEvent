@@ -17,25 +17,25 @@ class UsersService:
     async def register_user(
         cls, uow: AbstractUOW, user: UserRegisterSchema, response: Response
     ) -> int:
-        async with uow:
-            existing_user = await uow.users.find_one(email=user.email)
-            if existing_user:
-                raise UserAlreadyExistException
-            hashed_password = get_password_hash(user.password)
-            user_id = await uow.users.add_one(
-                email=user.email, name=user.name, hashed_password=hashed_password, is_moderator=user.is_moderator
-            )
-            await uow.commit()
-            cls.setup_access_token(user_id=user_id, response=response)
-            return user_id
+        existing_user = await uow.users.find_one(email=user.email)
+        if existing_user:
+            raise UserAlreadyExistException
+        hashed_password = get_password_hash(user.password)
+        user_id = await uow.users.add_one(
+            email=user.email,
+            name=user.name,
+            hashed_password=hashed_password
+        )
+
+        cls.setup_access_token(user_id=user_id, response=response)
+        return user_id
 
     @staticmethod
     async def get_user_info(uow: AbstractUOW, user_id: int) -> UserInfoSchema:
-        async with uow:
-            user = await uow.users.find_one(id=user_id)
-            if not user:
-                raise UnauthorizedException
-            return UserInfoSchema(**user.dict())
+        user = await uow.users.find_one(id=user_id)
+        if not user:
+            raise UnauthorizedException
+        return UserInfoSchema(**user.dict())
 
     @staticmethod
     def setup_access_token(user_id: int, response: Response):
@@ -55,20 +55,17 @@ class UsersService:
     async def login_user(
         cls, uow: AbstractUOW, user_data: UserLoginSchema, response: Response
     ):
-        async with uow:
-            user = await cls.authenticate_user(
-                uow=uow, email=user_data.email, password=user_data.password
-            )
-            cls.setup_access_token(user_id=user.id, response=response)
-            return user.id
+        user = await cls.authenticate_user(
+            uow=uow, email=user_data.email, password=user_data.password
+        )
+        cls.setup_access_token(user_id=user.id, response=response)
+        return user.id
 
     @staticmethod
     def logout_user(response: Response):
         response.delete_cookie("TootEventToken")
-        return {"status": "ok"}
 
     @staticmethod
     async def user_is_moderator(uow: AbstractUOW, user_id: int) -> bool:
-        async with uow:
-            user = await uow.users.find_one(id=user_id)
-            return user.is_moderator
+        user = await uow.users.find_one(id=user_id)
+        return user.is_moderator

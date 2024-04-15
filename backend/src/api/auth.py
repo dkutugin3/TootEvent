@@ -1,8 +1,9 @@
 from fastapi import APIRouter, Response, Depends
 
 from schemas.auth import UserRegisterSchema, UserLoginSchema, UserInfoSchema
+from usecases.user import UserUseCase
 from services.auth.dependencies import get_current_user_id
-from utils.dependencies import UOWDep
+from usecases.dependencies import UserCase, EventCase
 from services.users import UsersService
 
 router = APIRouter(
@@ -12,29 +13,29 @@ router = APIRouter(
 
 
 @router.post("/register")
-async def register_user(uow: UOWDep, user_data: UserRegisterSchema, response: Response):
-    await UsersService.register_user(uow=uow, user=user_data, response=response)
+async def register_user(
+    user_data: UserRegisterSchema, response: Response, user_case: UserCase
+):
+    await user_case.registrate(user=user_data, response=response)
     return {"status": "ok"}
 
 
 @router.post("/login")
 async def login_user(
-    uow: UOWDep,
-    user_data: UserLoginSchema,
-    response: Response,
+    user_data: UserLoginSchema, response: Response, user_case: UserCase
 ):
-    await UsersService.login_user(uow, user_data, response=response)
+    await user_case.login(user_data, response=response)
     return {"status": "ok"}
 
 
 @router.post("/logout")
-async def logout_user(response: Response):
-    UsersService.logout_user(response=response)
+async def logout_user(response: Response, user_case: UserCase):
+    user_case.logout(response=response)
     return {"status": "ok"}
 
 
 @router.get("/info")
 async def get_user_info(
-    uow: UOWDep, user_id: int = Depends(get_current_user_id)
+    user_case: UserCase, user_id: int = Depends(get_current_user_id)
 ) -> UserInfoSchema:
-    return await UsersService.get_user_info(uow=uow, user_id=user_id)
+    return await user_case.get_info(user_id=user_id)
