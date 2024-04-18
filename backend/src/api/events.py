@@ -2,10 +2,10 @@ from fastapi import APIRouter, Response, Depends
 
 from schemas.events import EventInfoSchema, EventAddSchema
 from schemas.exceptions import AccessForbiddenException
+from usecases.dependencies import EventCase
 from utils.dependencies import UOWDep
 
-from services.events import EventsService
-from services.users import UsersService
+from usecases.event import EventUseCase
 from services.auth.dependencies import get_current_user_id
 
 
@@ -16,48 +16,40 @@ router = APIRouter(
 
 
 @router.get("/")
-async def get_events_list(uow: UOWDep):
-    return await EventsService.get_events_list(uow)
+async def get_events_list(event_case: EventCase):
+    return await event_case.get_list()
 
 
 @router.get("/{event_id}")
-async def get_event_info(
-        uow: UOWDep, event_id: int) -> EventInfoSchema:
-    return await EventsService.get_event_info(uow, event_id)
+async def get_event_info(event_id: int, event_case: EventCase) -> EventInfoSchema:
+    return await event_case.get_info(event_id)
 
 
 @router.post("/")
 async def add_event(
-        uow: UOWDep,
-        event_data: EventAddSchema,
-        user_id: int = Depends(get_current_user_id)
+    event_data: EventAddSchema,
+    event_case: EventCase,
+    user_id: int = Depends(get_current_user_id),
 ):
-    if not await UsersService.user_is_moderator(uow, user_id):
-        raise AccessForbiddenException
-    await EventsService.add_event(uow, event_data)
+    await event_case.add(event_data, user_id)
     return {"status": "ok"}
 
 
 @router.delete("/{event_id}")
 async def delete_event(
-        uow: UOWDep,
-        event_id: int,
-        user_id: int = Depends(get_current_user_id)
+    event_id: int, event_case: EventCase, user_id: int = Depends(get_current_user_id)
 ):
-    if not await UsersService.user_is_moderator(uow, user_id):
-        raise AccessForbiddenException
-    await EventsService.delete_event(uow, event_id)
+    await event_case.delete(event_id, user_id)
     return {"status": "ok"}
 
 
 @router.patch("/{event_id}")
 async def change_event_info(
-        uow: UOWDep,
-        event_id: int,
-        data: dict,
-        user_id: int = Depends(get_current_user_id)
+    event_id: int,
+    data: dict,
+    event_case: EventCase,
+    user_id: int = Depends(get_current_user_id),
 ):
-    if not await UsersService.user_is_moderator(uow, user_id):
-        raise AccessForbiddenException
-    await EventsService.change_event_info(uow, event_id, data)
+
+    await event_case.update(event_id, user_id, **data)
     return {"status": "ok"}

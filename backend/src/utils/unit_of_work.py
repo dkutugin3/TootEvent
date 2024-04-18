@@ -1,25 +1,7 @@
-from abc import ABC, abstractmethod
-
 from db.database import async_session_maker
+from domain.utils.unit_of_work import AbstractUOW
 from repositories.users import UsersRepo
 from repositories.events import EventsRepo
-
-
-class AbstractUOW(ABC):
-    users: UsersRepo
-    events: EventsRepo
-
-    @abstractmethod
-    async def __aenter__(self): ...
-
-    @abstractmethod
-    async def __aexit__(self, *args): ...
-
-    @abstractmethod
-    async def commit(self): ...
-
-    @abstractmethod
-    async def rollback(self): ...
 
 
 class UOW(AbstractUOW):

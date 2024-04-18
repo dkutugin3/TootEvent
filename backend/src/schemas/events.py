@@ -25,7 +25,9 @@ class EventInfoSchema(BaseModel):
 
 class EventAddSchema(BaseModel):
     title: str = Field(max_length=30, examples=["NineEleven"])
-    date: str = Field(examples=["11.09.2001 09:11 UTC +0300", "DD.MM.YYYY HH:MM UTC +HHMM"])
+    date: str = Field(
+        examples=["11.09.2001 09:11 UTC +0300", "DD.MM.YYYY HH:MM UTC +HHMM"]
+    )
     price: int
     genre: list | None = Field(examples=[["comedy", "tradegy"], ["drama"]])
     rating: int

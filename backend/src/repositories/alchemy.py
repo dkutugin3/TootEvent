@@ -1,7 +1,7 @@
 from pydantic import BaseModel
 from sqlalchemy import select, insert, delete, update
 from sqlalchemy.ext.asyncio import AsyncSession
-from repositories.base import AbstractRepo
+from domain.repositories.base import AbstractRepo
 from typing import List
 
 
