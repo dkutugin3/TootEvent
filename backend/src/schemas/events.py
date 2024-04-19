@@ -1,7 +1,4 @@
-from typing import Annotated
-from pydantic import BaseModel, StringConstraints, Field
-
-import datetime as dt
+from pydantic import BaseModel, Field
 
 
 class EventSchema(BaseModel):
@@ -26,7 +23,7 @@ class EventInfoSchema(BaseModel):
 class EventAddSchema(BaseModel):
     title: str = Field(max_length=30, examples=["NineEleven"])
     date: str = Field(
-        examples=["11.09.2001 09:11 UTC +0300", "DD.MM.YYYY HH:MM UTC +HHMM"]
+        examples=["11.09.2001 09:11", "DD.MM.YYYY HH:MM"]
     )
     price: int
     genre: list | None = Field(examples=[["comedy", "tradegy"], ["drama"]])

@@ -46,3 +46,18 @@ class UserIsNotPresentException(BException):
 class AccessForbiddenException(BException):
     status_code = status.HTTP_403_FORBIDDEN
     detail = "Доступ запрещён"
+
+
+class EventAlreadyStartedException(BException):
+    status_code = status.HTTP_418_IM_A_TEAPOT
+    detail = "Мероприятие уже началось"
+
+
+class RefundDeclinedException(BException):
+    status_code = status.HTTP_418_IM_A_TEAPOT
+    detail = "Время возврата билета истекло"
+
+
+class BadRequestException(BException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    detail = "Bad Request"

@@ -12,7 +12,7 @@ class Events(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, nullable=False)
     title: Mapped[str] = mapped_column(String(30), nullable=False)
-    date = mapped_column(DateTime(timezone=True), nullable=False)
+    date = mapped_column(DateTime(timezone=False), nullable=False)
     price: Mapped[int] = mapped_column(nullable=False)
     genre: Mapped[dict | list | None] = mapped_column(JSON, nullable=True)
     rating: Mapped[int] = mapped_column(nullable=True)

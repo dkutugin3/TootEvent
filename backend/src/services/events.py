@@ -1,7 +1,6 @@
-from fastapi import Response, Depends
 from pydantic import BaseModel
 
-from schemas.events import EventSchema, EventAddSchema, EventInfoSchema
+from schemas.events import EventAddSchema, EventInfoSchema
 from utils.unit_of_work import AbstractUOW
 
 from typing import List

@@ -1,11 +1,8 @@
-from fastapi import APIRouter, Response, Depends
+from fastapi import APIRouter, Depends
 
 from schemas.events import EventInfoSchema, EventAddSchema
-from schemas.exceptions import AccessForbiddenException
 from usecases.dependencies import EventCase
-from utils.dependencies import UOWDep
 
-from usecases.event import EventUseCase
 from services.auth.dependencies import get_current_user_id
 
 
