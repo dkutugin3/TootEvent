@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from domain.usecases.tickets import AbstractTicketUseCase
 from schemas.bookings import BookingInfoSchema
 from schemas.exceptions import AccessForbiddenException, RefundDeclinedException
+from schemas.payment import RefundSchema
 from services.bookings import BookingsService
 from services.events import EventsService
 from services.tickets import TicketsService
@@ -62,7 +63,8 @@ class TicketUseCase(AbstractTicketUseCase):
     async def refund(
             self,
             ticket_id: int,
-            user_id: int
+            user_id: int,
+            req: RefundSchema
     ):
         date = Dm.now()
         async with self.uow:
@@ -74,14 +76,18 @@ class TicketUseCase(AbstractTicketUseCase):
             if date > Dm.add(event_date, days=-2):
                 raise RefundDeclinedException
 
-            # payment logic
-
             await TicketsService.delete_ticket_by_id(self.uow, ticket_id)
             if booking.number_of_tickets > 1:
                 await BookingsService.update_booking_info(self.uow, booking.id,
                                                           number_of_tickets=booking.number_of_tickets - 1)
             else:
                 await BookingsService.delete_booking_by_id(self.uow, booking.id)
+
+            # event = await EventsService.get_event_info(self.uow, booking.event_id)
+
+            # await EventsService.change_event_info(self.uow, event.id, capacity=(event.capacity+1))
+
+            # payment to {req.card} {event.price}
 
             await self.uow.commit()
 

@@ -45,14 +45,14 @@ async def get_bookings_list_by_current_user_id(
     return await booking_case.get_list_by_current_user(user_id)
 
 
-@router.post("/{event_id}{number_of_tickets}")
-async def buy(
+@router.post("/")
+async def add(
         event_id: int,
         number_of_tickets: int,
         booking_case: BookingCase,
         user_id: int = Depends(get_current_user_id),
 ):
-    await booking_case.buy(event_id, number_of_tickets, user_id)
+    await booking_case.add(event_id, number_of_tickets, user_id)
     # redirect to payment
     return {"status": "ok"}
 

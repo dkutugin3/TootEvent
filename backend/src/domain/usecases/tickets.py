@@ -1,5 +1,7 @@
 from abc import ABC, abstractmethod
 
+from schemas.payment import RefundSchema
+
 
 class AbstractTicketUseCase(ABC):
 
@@ -16,7 +18,7 @@ class AbstractTicketUseCase(ABC):
     async def get_list(self, user_id: int): ...
 
     @abstractmethod
-    async def refund(self, ticket_id: int, user_id: int): ...
+    async def refund(self, ticket_id: int, user_id: int, req: RefundSchema): ...
 
     @abstractmethod
     async def delete(self, ticket_id: int, user_id: int): ...

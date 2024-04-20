@@ -58,6 +58,16 @@ class RefundDeclinedException(BException):
     detail = "Время возврата билета истекло"
 
 
+class PaymentExpiredException(BException):
+    status_code = status.HTTP_418_IM_A_TEAPOT
+    detail = "Время оплаты брони истекло"
+
+
+class PaymentDeclinedException(BException):
+    status_code = status.HTTP_418_IM_A_TEAPOT
+    detail = "Ошибка обработки платежа"
+
+
 class BadRequestException(BException):
     status_code = status.HTTP_400_BAD_REQUEST
     detail = "Bad Request"

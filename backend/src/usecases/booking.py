@@ -6,7 +6,7 @@ from pydantic import BaseModel
 from domain.usecases.booking import AbstractBookingUseCase
 from schemas.bookings import BookingInfoSchema
 from schemas.exceptions import AccessForbiddenException, EventAlreadyStartedException, BadRequestException, \
-    RefundDeclinedException
+    RefundDeclinedException, PaymentExpiredException
 from services.events import EventsService
 from services.tickets import TicketsService
 from utils.dependencies import UOWDep
@@ -59,7 +59,7 @@ class BookingUseCase(AbstractBookingUseCase):
 
         return booking
 
-    async def buy(
+    async def add(
             self,
             event_id: int,
             number_of_tickets: int,
@@ -74,17 +74,38 @@ class BookingUseCase(AbstractBookingUseCase):
             # if event.booked + number_of_tickets > event.capacity:
             #     raise AllTicketsSoldException
 
-            # payment logic
-
             booking_id = await BookingsService.add_booking(self.uow, event_id, user_id, number_of_tickets,
                                                            Dm.date_to_string(date))
 
-            # this must be called after payment confirmed
-            for i in range(number_of_tickets):
-                await TicketsService.add_ticket(self.uow, booking_id)
-
             await self.uow.commit()
         return booking_id
+
+    async def confirm(self, booking_id: int, user_id: int, card: int, cvv: int):
+        date = Dm.now()
+        async with self.uow:
+            booking = await BookingsService.get_booking_info(self.uow, booking_id)
+            if user_id != booking.user_id:
+                raise BadRequestException
+            if booking.is_payed:
+                raise BadRequestException
+            if date > Dm.add(Dm.string_to_date(booking.date), minutes=30):
+                raise PaymentExpiredException
+
+            # event = await EventsService.get_event_info(self.uow, booking.event_id)
+            # if event.capacity == 0:
+            #   raise AllTicketsSoldException
+            # await EventsService.change_event_info(self.uow, event.id,
+            #                                       capacity=(event.capacity - booking.number_of_tickets))
+
+            # recive pay from {card cvv} {event.price * booking.number_of_tickets}
+
+            await BookingsService.update_booking_info(self.uow, booking_id, is_payed=True)
+
+            ticket_ids = [await TicketsService.add_ticket(self.uow, booking_id) for i in
+                          range(booking.number_of_tickets)]
+            await self.uow.commit()
+
+        return ticket_ids
 
     async def delete(
             self,
