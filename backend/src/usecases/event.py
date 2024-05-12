@@ -1,12 +1,10 @@
 from typing import List
 
-from fastapi import Depends
 from pydantic import BaseModel
 
 from domain.usecases.event import AbstractEventUseCase
 from schemas.events import EventAddSchema, EventInfoSchema
 from schemas.exceptions import AccessForbiddenException
-from services.auth.dependencies import get_current_user_id
 from utils.dependencies import UOWDep
 from services.events import EventsService
 from services.users import UsersService
