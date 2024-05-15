@@ -9,11 +9,10 @@ services:
       POSTGRES_PASSWORD: "postgres"
 
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U postgres"]
+      test: ["CMD", "pg_isready", "-q", "-d", "user=postgres password=postgres dbname=postgres"]
       interval: 5s
-      timeout: 30s
-      retries: 100
-      start_period: 30s
+      timeout: 90s
+      retries: 300
 
     ports:
       - "5432:5432"
@@ -22,7 +21,9 @@ services:
       - postgres_data:/var/lib/postgresql/data
     
   fastapi_app:
-    image: "mai_app"
+    container_name: "fastapi"
+    build:
+      dockerfile: ./Dockerfile
     
     depends_on:
       postgres:
