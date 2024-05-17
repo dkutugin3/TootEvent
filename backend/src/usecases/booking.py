@@ -7,8 +7,8 @@ from domain.usecases.booking import AbstractBookingUseCase
 from schemas.bookings import BookingInfoSchema
 from schemas.exceptions import AccessForbiddenException, EventAlreadyStartedException, BadRequestException, \
     RefundDeclinedException, PaymentExpiredException
+from schemas.payment import RefundSchema, PaymentSchema
 from services.events import EventsService
-from services.tickets import TicketsService
 from utils.dependencies import UOWDep
 from services.bookings import BookingsService
 from services.users import UsersService
@@ -101,11 +101,34 @@ class BookingUseCase(AbstractBookingUseCase):
 
             await BookingsService.update_booking_info(self.uow, booking_id, is_payed=True)
 
-            ticket_ids = [await TicketsService.add_ticket(self.uow, booking_id) for i in
-                          range(booking.number_of_tickets)]
             await self.uow.commit()
 
-        return ticket_ids
+    async def refund(
+            self,
+            booking_id: int,
+            user_id: int,
+            card: int
+    ):
+        date = Dm.now()
+        async with self.uow:
+            booking = await BookingsService.get_booking_info(self.uow, booking_id)
+            if booking.user_id != user_id:
+                raise AccessForbiddenException
+
+            event_date = Dm.string_to_date((await EventsService.get_event_info(self.uow, booking.event_id)).date)
+            if date > Dm.add(event_date, days=-2):
+                raise RefundDeclinedException
+
+            await BookingsService.update_booking_info(self.uow, booking_id, is_payed=False)
+            # await BookingsService.delete_booking_by_id(self.uow, booking.id)
+
+            # event = await EventsService.get_event_info(self.uow, booking.event_id)
+
+            # await EventsService.change_event_info(self.uow, event.id, capacity=(event.capacity+1))
+
+            # payment to {req.card} {event.price}
+
+            await self.uow.commit()
 
     async def delete(
             self,
