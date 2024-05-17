@@ -10,6 +10,9 @@ class AbstractBookingUseCase(ABC):
     async def confirm(self, booking_id: int, user_id: int, card: int, cvv: int): ...
 
     @abstractmethod
+    async def refund(self, booking_id: int, user_id: int, card: int): ...
+
+    @abstractmethod
     async def get_info(self, booking_id: int, user_id: int): ...
 
     @abstractmethod
