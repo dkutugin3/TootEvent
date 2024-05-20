@@ -7,6 +7,7 @@ class EventSchema(BaseModel):
     date: str
     price: int
     genre: list | None
+    places_left: int
     rating: int
     location: dict | None
 
@@ -16,6 +17,7 @@ class EventInfoSchema(BaseModel):
     date: str
     price: int
     genre: list | None
+    places_left: int
     rating: int
     location: dict | None
 
@@ -27,5 +29,6 @@ class EventAddSchema(BaseModel):
     )
     price: int
     genre: list | None = Field(examples=[["comedy", "tradegy"], ["drama"]])
+    total_places: int
     rating: int
     location: dict | None = Field(examples=[{"country": "USA", "city": "NewYork"}])

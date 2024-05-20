@@ -1,6 +1,7 @@
 from fastapi import APIRouter, Depends
 
 from usecases.dependencies import BookingCase
+from usecases.dependencies import CheckCase
 
 from services.auth.dependencies import get_current_user_id
 
@@ -47,12 +48,11 @@ async def get_bookings_list_by_current_user_id(
 
 @router.post("/")
 async def add(
-        event_id: int,
-        number_of_tickets: int,
-        booking_case: BookingCase,
+        events: dict | None,
+        check_case: CheckCase,
         user_id: int = Depends(get_current_user_id),
 ):
-    await booking_case.add(event_id, number_of_tickets, user_id)
+    await check_case.create(user_id, events)
     # redirect to payment
     return {"status": "ok"}
 
