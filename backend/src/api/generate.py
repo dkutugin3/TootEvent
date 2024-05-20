@@ -15,5 +15,8 @@ async def add_event(
         event_case: EventCase,
         user_id: int = Depends(get_current_user_id),
 ):
-    await GigaChatManager.fill_bd(event_case=event_case, user_id=user_id)
-    return {"status": "ok"}
+    try:
+        await GigaChatManager.fill_bd(event_case=event_case, user_id=user_id)
+        return {"status": "ok"}
+    except Exception:
+        return {"status": "bad"}
