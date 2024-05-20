@@ -8,6 +8,8 @@ DB_PORT=5432
 DB_USER=postgres
 DB_PASS=postgres
 DB_NAME=postgres
+CLIENT_SECRET=6de8f5fa-4ebc-428e-8d2d-afd8aa7a92f9
+AUTH_DATA=OWUzYWI3NDQtMGQ4Zi00NDJjLWFkNjEtODJjY2Y2OTc4ZDE3OjZkZThmNWZhLTRlYmMtNDI4ZS04ZDJkLWFmZDhhYTdhOTJmOQ==
 " > .env
 cd ..
 docker compose up -d 
