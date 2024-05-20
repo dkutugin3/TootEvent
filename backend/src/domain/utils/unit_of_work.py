@@ -3,12 +3,14 @@ from abc import ABC, abstractmethod
 from repositories.bookings import BookingsRepo
 from repositories.events import EventsRepo
 from repositories.users import UsersRepo
+from repositories.checks import ChecksRepo
 
 
 class AbstractUOW(ABC):
     users: UsersRepo
     events: EventsRepo
     bookings: BookingsRepo
+    checks: ChecksRepo
 
     @abstractmethod
     async def __aenter__(self): ...

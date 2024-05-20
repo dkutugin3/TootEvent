@@ -1,7 +1,7 @@
 from fastapi import APIRouter, Depends
 
 from schemas.payment import PaymentSchema, RefundSchema
-from usecases.dependencies import  BookingCase
+from usecases.dependencies import BookingCase, CheckCase
 
 from services.auth.dependencies import get_current_user_id
 
@@ -12,14 +12,14 @@ router = APIRouter(
 )
 
 
-@router.post("/{booking_id}")
+@router.post("/{check_id}")
 async def confirm(
-        booking_id: int,
+        check_id: int,
         payment_info: PaymentSchema,
-        booking_case: BookingCase,
+        check_case: CheckCase,
         user_id: int = Depends(get_current_user_id)
 ):
-    await booking_case.confirm(booking_id, user_id, payment_info.card, payment_info.cvv)
+    await check_case.confirm(check_id, user_id, payment_info.card, payment_info.cvv)
     return {"status": "ok"}
 
 

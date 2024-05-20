@@ -4,12 +4,6 @@ from abc import ABC, abstractmethod
 class AbstractBookingUseCase(ABC):
 
     @abstractmethod
-    async def add(self, event_id: int, number_of_tickets: int, user_id: int): ...
-
-    @abstractmethod
-    async def confirm(self, booking_id: int, user_id: int, card: int, cvv: int): ...
-
-    @abstractmethod
     async def refund(self, booking_id: int, user_id: int, card: int): ...
 
     @abstractmethod

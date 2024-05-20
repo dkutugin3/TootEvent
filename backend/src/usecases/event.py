@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from domain.usecases.event import AbstractEventUseCase
 from schemas.events import EventAddSchema, EventInfoSchema
 from schemas.exceptions import AccessForbiddenException
+from services.bookings import BookingsService
 from utils.dependencies import UOWDep
 from services.events import EventsService
 from services.users import UsersService
@@ -17,13 +18,17 @@ class EventUseCase(AbstractEventUseCase):
 
     async def get_list(self) -> List[BaseModel]:
         async with self.uow:
+            await BookingsService.mark_if_expired(self.uow)
             events_list = await EventsService.get_events_list(self.uow)
+            await self.uow.commit()
 
         return events_list
 
     async def get_info(self, event_id: int) -> EventInfoSchema:
         async with self.uow:
+            await BookingsService.mark_if_expired(self.uow, event_id=event_id)
             event = await EventsService.get_event_info(self.uow, event_id)
+            await self.uow.commit()
 
         return event
 
@@ -52,7 +57,7 @@ class EventUseCase(AbstractEventUseCase):
 
     async def update(self,
                      event_id: int,
-                     user_id:int,
+                     user_id: int,
                      **data
     ):
         async with self.uow:

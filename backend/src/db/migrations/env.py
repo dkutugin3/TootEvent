@@ -8,6 +8,7 @@ from config import settings
 from models.users import Users
 from models.events import Events
 from models.bookings import Bookings
+from models.checks import Checks
 from db.database import Base
 
 

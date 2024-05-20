@@ -63,9 +63,24 @@ class PaymentExpiredException(BException):
     detail = "Время оплаты брони истекло"
 
 
+class CheckIsNotPayedException(BException):
+    status_code = status.HTTP_418_IM_A_TEAPOT
+    detail = "Билет не был оплачен"
+
+
 class PaymentDeclinedException(BException):
     status_code = status.HTTP_418_IM_A_TEAPOT
     detail = "Ошибка обработки платежа"
+
+
+class NotEnoughPlacesLeftException(BException):
+    status_code = status.HTTP_418_IM_A_TEAPOT
+    detail = "Недостаточно мест на мероприятие"
+
+
+class NotValidBookingException(BException):
+    status_code = status.HTTP_418_IM_A_TEAPOT
+    detail = "Бронь недействительна"
 
 
 class BadRequestException(BException):

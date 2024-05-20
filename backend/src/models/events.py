@@ -15,6 +15,7 @@ class Events(Base):
     date = mapped_column(DateTime(timezone=False), nullable=False)
     price: Mapped[int] = mapped_column(nullable=False)
     genre: Mapped[dict | list | None] = mapped_column(JSON, nullable=True)
+    places_left: Mapped[int] = mapped_column(nullable=False)
     rating: Mapped[int] = mapped_column(nullable=True)
     location: Mapped[dict | list | None] = mapped_column(JSON, nullable=True)
 
@@ -25,6 +26,7 @@ class Events(Base):
             date=Dm.date_to_string(self.date),
             price=self.price,
             genre=self.genre,
+            places_left=self.places_left,
             rating=self.rating,
             location=self.location,
         )

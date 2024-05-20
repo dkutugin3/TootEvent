@@ -19,6 +19,7 @@ class EventsService:
             date=Dm.string_to_date(event.date),
             price=event.price,
             genre=event.genre,
+            places_left=event.total_places,
             rating=event.rating,
             location=event.location,
         )
@@ -41,6 +42,15 @@ class EventsService:
         **data,
     ):
         await uow.events.update_by_id(event_id, **data)
+
+    @staticmethod
+    async def change_number_of_places_left(
+        uow: AbstractUOW,
+        event_id: int,
+        delta: int
+    ):
+        event = await uow.events.find_one(id=event_id)
+        await uow.events.update_by_id(event_id, places_left=(event.places_left+delta))
 
     @staticmethod
     async def delete_event(uow: AbstractUOW, event_id: int):

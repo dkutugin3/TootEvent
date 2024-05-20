@@ -2,10 +2,9 @@ from pydantic import BaseModel
 
 from schemas.bookings import BookingInfoSchema
 from utils.unit_of_work import AbstractUOW
+from utils.date_manager import DateManager as Dm
 
 from typing import List
-
-from utils.date_manager import DateManager as Dm
 
 
 class BookingsService:
@@ -14,14 +13,17 @@ class BookingsService:
             uow: AbstractUOW,
             event_id: int,
             user_id: int,
+            check_id: int,
             number_of_tickets: int,
-            date: str,
+            cost: int,
     ) -> int:
         booking_id = await uow.bookings.add_one(
+            check_id=check_id,
             user_id=user_id,
             event_id=event_id,
             number_of_tickets=number_of_tickets,
-            date=Dm.string_to_date(date)
+            cost=cost,
+            is_expired=False,
         )
         return booking_id
 
@@ -40,9 +42,20 @@ class BookingsService:
         await uow.bookings.delete_by_id(model_id=booking_id)
 
     @staticmethod
-    async def delete_booking_by_event(uow: AbstractUOW, event_id: int, user_id: int):
-        await uow.bookings.delete_by_event(event_id=event_id, user_id=user_id)
-
-    @staticmethod
     async def update_booking_info(uow: AbstractUOW, booking_id: int, **to_update):
         await uow.bookings.update_by_id(booking_id, **to_update)
+
+    @staticmethod
+    async def mark_if_expired(uow: AbstractUOW, **filter_by) -> bool:
+        is_expired = False
+        date = Dm.now()
+        bookings = await uow.bookings.find_all(is_expired=False, **filter_by)
+        for booking in bookings:
+            check = await uow.checks.find_one(id=booking.check_id)
+            if (Dm.add(date, minutes=-30) > Dm.string_to_date(check.date)) and (not check.is_payed):
+                is_expired = True
+                await uow.bookings.update_by_id(booking.id, is_expired=True)
+                event = await uow.events.find_one(id=booking.event_id)
+                await uow.events.update_by_id(booking.event_id, places_left=(event.places_left+booking.number_of_tickets))
+
+        return is_expired
