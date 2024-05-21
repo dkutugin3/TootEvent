@@ -12,8 +12,9 @@ class Checks(Base):
 
     id: Mapped[int] = mapped_column(primary_key=True, nullable=False)
     user_id: Mapped[int] = mapped_column(ForeignKey("users.id"), nullable=False)
-    events: Mapped[dict | None] = mapped_column(JSON, nullable=False)
+    events: Mapped[list | None] = mapped_column(JSON, nullable=False)
     date = mapped_column(DateTime(timezone=False), nullable=False)
+    total: Mapped[int] = mapped_column(nullable=False)
     is_payed: Mapped[bool] = mapped_column(default=False, nullable=False)
 
     def to_read_model(self) -> CheckSchema:
@@ -22,5 +23,6 @@ class Checks(Base):
             user_id=self.user_id,
             events=self.events,
             date=Dm.date_to_string(self.date),
+            total=self.total,
             is_payed=self.is_payed
         )

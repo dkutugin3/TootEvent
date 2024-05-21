@@ -63,6 +63,11 @@ class PaymentExpiredException(BException):
     detail = "Время оплаты брони истекло"
 
 
+class CheckIsAlreadyPayedException(BException):
+    status_code = status.HTTP_418_IM_A_TEAPOT
+    detail = "Билет уже оплачен"
+
+
 class CheckIsNotPayedException(BException):
     status_code = status.HTTP_418_IM_A_TEAPOT
     detail = "Билет не был оплачен"

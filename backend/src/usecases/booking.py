@@ -31,19 +31,20 @@ class BookingUseCase(AbstractBookingUseCase):
         date = Dm.now()
         async with self.uow:
             booking = await BookingsService.get_booking_info(self.uow, booking_id)
-            check = await ChecksService.get_check_info(self.uow, booking.check_id)
-            if check.user_id != user_id:
+            if booking.user_id != user_id:
                 raise AccessForbiddenException
+            if not booking.is_valid:
+                raise NotValidBookingException
+            check = await ChecksService.get_check_info(self.uow, booking.check_id)
+
             if not check.is_payed:
                 raise CheckIsNotPayedException
-            if booking.is_expired:
-                raise NotValidBookingException
 
             event_date = Dm.string_to_date((await EventsService.get_event_info(self.uow, booking.event_id)).date)
             if date > Dm.add(event_date, days=-2):
                 raise RefundDeclinedException
 
-            await BookingsService.update_booking_info(self.uow, booking_id, is_expired=True)
+            await BookingsService.update_booking_info(self.uow, booking_id, is_valid=False)
             await EventsService.change_number_of_places_left(self.uow, booking.event_id, booking.number_of_tickets)
 
             # payment to <card> <booking.cost * booking.number_of_tickets>

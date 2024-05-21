@@ -1,5 +1,6 @@
 from fastapi import APIRouter, Depends
 
+from schemas.checks import CheckAddSchema
 from usecases.dependencies import BookingCase
 from usecases.dependencies import CheckCase
 
@@ -47,8 +48,8 @@ async def get_bookings_list_by_current_user_id(
 
 
 @router.post("/")
-async def add(
-        events: dict | None,
+async def book(
+        events: CheckAddSchema,
         check_case: CheckCase,
         user_id: int = Depends(get_current_user_id),
 ):

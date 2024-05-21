@@ -19,7 +19,7 @@ async def confirm(
         check_case: CheckCase,
         user_id: int = Depends(get_current_user_id)
 ):
-    await check_case.confirm(check_id, user_id, payment_info.card, payment_info.cvv)
+    await check_case.commit_payment(check_id, user_id, payment_info.card, payment_info.cvv)
     return {"status": "ok"}
 
 

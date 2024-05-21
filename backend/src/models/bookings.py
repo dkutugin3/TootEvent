@@ -14,7 +14,7 @@ class Bookings(Base):
     event_id: Mapped[int] = mapped_column(ForeignKey("events.id"), nullable=False)
     number_of_tickets: Mapped[int] = mapped_column(nullable=False)
     cost: Mapped[int] = mapped_column(nullable=False)
-    is_expired: Mapped[bool] = mapped_column(default=False, nullable=False)
+    is_valid: Mapped[bool] = mapped_column(default=False, nullable=False)
 
     def to_read_model(self) -> BookingSchema:
         return BookingSchema(
@@ -24,5 +24,5 @@ class Bookings(Base):
             event_id=self.event_id,
             number_of_tickets=self.number_of_tickets,
             cost=self.cost,
-            is_expired=self.is_expired
+            is_valid=self.is_valid
         )
