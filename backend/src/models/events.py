@@ -1,3 +1,5 @@
+import pathlib
+
 from sqlalchemy import String, JSON
 from sqlalchemy.types import DateTime
 from sqlalchemy.orm import Mapped, mapped_column
@@ -18,6 +20,7 @@ class Events(Base):
     places_left: Mapped[int] = mapped_column(nullable=False)
     rating: Mapped[int] = mapped_column(nullable=True)
     location: Mapped[dict | list | None] = mapped_column(JSON, nullable=True)
+    poster_path: Mapped[str] = mapped_column(nullable=True)
 
     def to_read_model(self) -> EventSchema:
         return EventSchema(
@@ -29,4 +32,5 @@ class Events(Base):
             places_left=self.places_left,
             rating=self.rating,
             location=self.location,
+            poster_path=self.poster_path,
         )

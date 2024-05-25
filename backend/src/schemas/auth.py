@@ -18,6 +18,7 @@ class UserInfoSchema(BaseModel):
     email: EmailStr = Field(max_length=30)
     name: str = Field(max_length=30)
     is_moderator: bool
+    avatar_path: str | None
 
 
 class UserLoginSchema(BaseModel):

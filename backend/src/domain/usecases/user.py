@@ -18,3 +18,9 @@ class AbstractUserUseCase(ABC):
 
     @abstractmethod
     async def get_info(self): ...
+
+    @abstractmethod
+    async def edit_info(self, user_id, target_user_id, **data): ...
+
+    @abstractmethod
+    async def edit_my_info(self, user_id, **data): ...
