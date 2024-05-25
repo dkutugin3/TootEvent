@@ -30,7 +30,7 @@ class UserUseCase(AbstractUserUseCase):
     def logout(self, response: Response):
         UsersService.logout_user(response)
 
-    async def get_info(self, user_id: int = Depends(get_current_user_id)) -> UserInfoSchema:
+    async def get_my_info(self, user_id: int) -> UserInfoSchema:
         async with self.uow:
             user = await UsersService.get_user_info(self.uow, user_id)
 

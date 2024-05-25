@@ -35,7 +35,7 @@ async def logout_user(response: Response, user_case: UserCase):
 
 
 @router.get("/info")
-async def get_user_info(
+async def get_current_user_info(
     user_case: UserCase, user_id: int = Depends(get_current_user_id)
 ) -> UserInfoSchema:
-    return await user_case.get_info(user_id=user_id)
+    return await user_case.get_my_info(user_id)

@@ -17,7 +17,7 @@ class FileUploader:
             raise BadFileException
         with open(f"../resources/posters/poster_{event_id}.jpeg", "wb") as file:
             file.write(await poster.read())
-        await event_case.edit_info(event_id, user_id, poster_path=f"./backend/resources/posters/poster_{event_id}.jpeg")
+        await event_case.edit_info(event_id, user_id, poster_path=f"../resources/posters/poster_{event_id}.jpeg")
 
     @staticmethod
     async def avatar_upload(
@@ -31,7 +31,7 @@ class FileUploader:
         with open(f"../resources/avatars/avatar_{target_user_id}.jpeg", "wb") as file:
             file.write(await avatar.read())
         await user_case.edit_info(user_id, target_user_id,
-                                  avatar_path=f"./backend/resources/avatars/avatar_{target_user_id}.jpeg")
+                                  avatar_path=f"../resources/avatars/avatar_{target_user_id}.jpeg")
 
     @staticmethod
     async def my_avatar_upload(
@@ -43,4 +43,16 @@ class FileUploader:
             raise BadFileException
         with open(f"../resources/avatars/avatar_{user_id}.jpeg", "wb") as file:
             file.write(await avatar.read())
-        await user_case.edit_my_info(user_id, avatar_path=f"./backend/resources/avatars/avatar_{user_id}.jpeg")
+        await user_case.edit_my_info(user_id, avatar_path=f"../resources/avatars/avatar_{user_id}.jpeg")
+
+    @staticmethod
+    async def get_poster(event_id: int, event_case: AbstractEventUseCase) -> bytes:
+        event = await event_case.get_info(event_id)
+        with open(event.poster_path, 'rb') as file:
+            return file.read()
+
+    @staticmethod
+    async def get_my_avatar(user_id: int, user_case: AbstractUserUseCase) -> bytes:
+        user = await user_case.get_my_info(user_id)
+        with open(user.avatar_path, 'rb') as file:
+            return file.read()
