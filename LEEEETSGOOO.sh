@@ -12,5 +12,5 @@ CLIENT_SECRET=6de8f5fa-4ebc-428e-8d2d-afd8aa7a92f9
 AUTH_DATA=OWUzYWI3NDQtMGQ4Zi00NDJjLWFkNjEtODJjY2Y2OTc4ZDE3OjZkZThmNWZhLTRlYmMtNDI4ZS04ZDJkLWFmZDhhYTdhOTJmOQ==
 " > .env
 cd ..
-docker compose up -d 
+docker compose up -d --build
 open -u http://localhost:8000/docs
