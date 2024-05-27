@@ -1,4 +1,7 @@
+from typing import List
+
 from fastapi import Response, Depends
+from pydantic import BaseModel
 
 from schemas.auth import UserRegisterSchema, UserInfoSchema, UserLoginSchema
 from schemas.exceptions import (
@@ -36,6 +39,11 @@ class UsersService:
         if not user:
             raise UnauthorizedException
         return UserInfoSchema(**user.dict())
+
+    @staticmethod
+    async def get_users_list(uow: AbstractUOW) -> List[BaseModel]:
+        users = await uow.users.find_all()
+        return users
 
     @staticmethod
     def setup_access_token(user_id: int, response: Response):

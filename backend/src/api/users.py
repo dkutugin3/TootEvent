@@ -11,22 +11,26 @@ router = APIRouter(
 )
 
 
-@router.post("/{user_id}/avatar")
-async def upload_avatar(
-        target_user_id: int,
-        avatar: UploadFile,
-        user_case: UserCase,
-        user_id: int = Depends(get_current_user_id)
-):
-    await Fu.avatar_upload(target_user_id, avatar, user_case, user_id)
-    return {"status": "ok"}
-
-
 @router.post("/avatar/me")
 async def upload_my_avatar(
         avatar: UploadFile,
+        user_id: int = Depends(get_current_user_id)
+):
+    await Fu.my_avatar_upload(avatar, user_id)
+    return {"status": "ok"}
+
+
+@router.delete("/avatar/me")
+async def delete_my_avatar(
+        user_id: int = Depends(get_current_user_id)
+):
+    await Fu.delete_my_avatar(user_id)
+    return {"status": "ok"}
+
+
+@router.get("/")
+async def get_users_list(
         user_case: UserCase,
         user_id: int = Depends(get_current_user_id)
 ):
-    await Fu.my_avatar_upload(avatar, user_case, user_id)
-    return {"status": "ok"}
+    return await user_case.get_list(user_id)

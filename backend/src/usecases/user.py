@@ -1,4 +1,7 @@
+from typing import List
+
 from fastapi import Depends
+from pydantic import BaseModel
 from starlette.responses import Response
 
 from domain.usecases.user import AbstractUserUseCase
@@ -36,6 +39,13 @@ class UserUseCase(AbstractUserUseCase):
 
         return user
 
+    async def get_list(self, user_id: int) -> List[BaseModel]:
+        async with self.uow:
+            if not await UsersService.user_is_moderator(self.uow, user_id):
+                raise AccessForbiddenException
+            users = await UsersService.get_users_list(self.uow)
+        return users
+
     async def edit_info(self, user_id, target_user_id, **data):
         async with self.uow:
             if not await UsersService.user_is_moderator(self.uow, user_id):
@@ -49,3 +59,7 @@ class UserUseCase(AbstractUserUseCase):
             await UsersService.change_user_info(self.uow, user_id, **data)
 
             await self.uow.commit()
+
+    async def is_moderator(self, user_id: int):
+        async with self.uow:
+            return await UsersService.user_is_moderator(self.uow, user_id)
