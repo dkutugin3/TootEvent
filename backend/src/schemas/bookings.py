@@ -8,7 +8,7 @@ class BookingSchema(BaseModel):
     event_id: int
     number_of_tickets: int
     cost: int
-    is_expired: bool
+    is_valid: bool
 
 
 class BookingInfoSchema(BaseModel):
@@ -17,4 +17,4 @@ class BookingInfoSchema(BaseModel):
     event_id: int
     number_of_tickets: int
     cost: int
-    is_expired: bool
+    is_valid: bool

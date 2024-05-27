@@ -23,7 +23,7 @@ class BookingsService:
             event_id=event_id,
             number_of_tickets=number_of_tickets,
             cost=cost,
-            is_expired=False,
+            is_valid=True,
         )
         return booking_id
 
@@ -49,12 +49,12 @@ class BookingsService:
     async def mark_if_expired(uow: AbstractUOW, **filter_by) -> bool:
         is_expired = False
         date = Dm.now()
-        bookings = await uow.bookings.find_all(is_expired=False, **filter_by)
+        bookings = await uow.bookings.find_all(is_valid=True, **filter_by)
         for booking in bookings:
             check = await uow.checks.find_one(id=booking.check_id)
             if (Dm.add(date, minutes=-30) > Dm.string_to_date(check.date)) and (not check.is_payed):
                 is_expired = True
-                await uow.bookings.update_by_id(booking.id, is_expired=True)
+                await uow.bookings.update_by_id(booking.id, is_valid=False)
                 event = await uow.events.find_one(id=booking.event_id)
                 await uow.events.update_by_id(booking.event_id, places_left=(event.places_left+booking.number_of_tickets))
 
