@@ -31,6 +31,3 @@ class AbstractUserUseCase(ABC):
 
     @abstractmethod
     async def make_moderator(self, user_id, target_user_id): ...
-
-    @abstractmethod
-    async def find_event(self, query: str): ...

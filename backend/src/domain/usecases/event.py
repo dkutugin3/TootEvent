@@ -19,3 +19,6 @@ class AbstractEventUseCase(ABC):
 
     @abstractmethod
     async def edit_info(self, event_id: int, user_id: int, **data): ...
+
+    @abstractmethod
+    async def find_event(self, query: str): ...
