@@ -1,11 +1,16 @@
-from fastapi import Depends, Response
-from schemas.auth import UserInfoSchema, UserLoginSchema, UserRegisterSchema
-from schemas.exceptions import (IncorrectEmailOrPasswordException,
-                                UnauthorizedException,
-                                UserAlreadyExistException)
+from typing import List
+
+from fastapi import Response, Depends
+from pydantic import BaseModel
+
+from schemas.auth import UserRegisterSchema, UserInfoSchema, UserLoginSchema
+from schemas.exceptions import (
+    UserAlreadyExistException,
+    UnauthorizedException,
+    IncorrectEmailOrPasswordException,
+)
 from schemas.users import UserSchema
-from services.auth.auth import (create_access_token, get_password_hash,
-                                verify_password)
+from services.auth.auth import get_password_hash, create_access_token, verify_password
 from services.auth.dependencies import get_current_user_id
 from utils.unit_of_work import AbstractUOW
 
@@ -20,7 +25,9 @@ class UsersService:
             raise UserAlreadyExistException
         hashed_password = get_password_hash(user.password)
         user_id = await uow.users.add_one(
-            email=user.email, name=user.name, hashed_password=hashed_password
+            email=user.email,
+            name=user.name,
+            hashed_password=hashed_password
         )
 
         cls.setup_access_token(user_id=user_id, response=response)
@@ -32,6 +39,11 @@ class UsersService:
         if not user:
             raise UnauthorizedException
         return UserInfoSchema(**user.dict())
+
+    @staticmethod
+    async def get_users_list(uow: AbstractUOW) -> List[BaseModel]:
+        users = await uow.users.find_all()
+        return users
 
     @staticmethod
     def setup_access_token(user_id: int, response: Response):

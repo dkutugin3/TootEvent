@@ -19,7 +19,8 @@ class EventsService:
             genre=event.genre,
             places_left=event.total_places,
             rating=event.rating,
-            location=event.location,
+            city=event.city,
+            place=event.place,
         )
         return event_id
 

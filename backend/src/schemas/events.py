@@ -9,8 +9,8 @@ class EventSchema(BaseModel):
     genre: list | None
     places_left: int
     rating: int
-    location: dict | list | None
-    poster_path: str | None
+    city: str
+    place: str
 
 
 class EventInfoSchema(BaseModel):
@@ -20,17 +20,18 @@ class EventInfoSchema(BaseModel):
     genre: list | None
     places_left: int
     rating: int
-    location: dict | None
-    poster_path: str | None
+    city: str
+    place: str
 
 
 class EventAddSchema(BaseModel):
-    title: str = Field(max_length=30, examples=["NineEleven"])
-    date: str = Field(examples=["11.09.2001 09:11", "DD.MM.YYYY HH:MM"])
+    title: str = Field(max_length=30, examples=["NineEleven"],)
+    date: str = Field(
+        examples=["11.09.2001 09:11", "DD.MM.YYYY HH:MM"]
+    )
     price: int
     genre: list | None = Field(examples=[["comedy", "tradegy"], ["drama"]])
     total_places: int
     rating: int
-    location: list | dict | None = Field(
-        examples=[{"country": "USA", "city": "NewYork"}]
-    )
+    city: str = Field(examples=["New-York"])
+    place: str = Field(examples=["Twin Towers"])
