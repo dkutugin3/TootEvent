@@ -1,3 +1,6 @@
+import json
+from typing import List
+
 from fastapi import APIRouter, Depends, UploadFile
 
 from schemas.events import EventInfoSchema, EventAddSchema
@@ -72,3 +75,24 @@ async def delete_poster(
 ):
     await Fu.delete_poster(event_id, user_case, user_id)
     return {"status": "ok"}
+
+
+@router.get("/genres/get")
+async def get_all(
+    event_case: EventCase,
+):
+    genres: List[str] = []
+    for event in await event_case.get_list():
+        for genre in event.genre:
+            genres.append(genre)
+    genres = sorted(list(set(genres)))
+    return genres
+
+
+@router.get("/search/{query}")
+async def find(
+        query: str,
+        event_case: EventCase,
+):
+    events = await event_case.find_event(query)
+    return events

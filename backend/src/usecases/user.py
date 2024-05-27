@@ -8,7 +8,7 @@ from domain.usecases.user import AbstractUserUseCase
 
 from domain.usecases.user import AbstractUserUseCase
 from schemas.auth import UserRegisterSchema, UserLoginSchema, UserInfoSchema
-from schemas.exceptions import AccessForbiddenException
+from schemas.exceptions import AccessForbiddenException, UserIsAlreadyModeratorException
 from services.auth.dependencies import get_current_user_id
 from utils.dependencies import UOWDep
 from services.users import UsersService
@@ -63,3 +63,13 @@ class UserUseCase(AbstractUserUseCase):
     async def is_moderator(self, user_id: int):
         async with self.uow:
             return await UsersService.user_is_moderator(self.uow, user_id)
+
+    async def make_moderator(self, user_id, target_user_id):
+        async with self.uow:
+            if not await UsersService.user_is_moderator(self.uow, user_id):
+                raise AccessForbiddenException
+            if await UsersService.user_is_moderator(self.uow, target_user_id):
+                raise UserIsAlreadyModeratorException
+            await UsersService.change_user_info(self.uow, target_user_id, is_moderator=True)
+
+            await self.uow.commit()

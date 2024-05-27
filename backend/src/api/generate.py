@@ -9,7 +9,7 @@ router = APIRouter(
 )
 
 
-@router.post("/add_events/")
+@router.post("/add_events")
 async def add_event(
     event_case: EventCase,
     user_id: int = Depends(get_current_user_id),
