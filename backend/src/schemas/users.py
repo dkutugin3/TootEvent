@@ -9,3 +9,4 @@ class UserSchema(BaseModel):
     hashed_password: str
     preferences: dict | list | None
     is_moderator: bool
+    avatar_path: str | None

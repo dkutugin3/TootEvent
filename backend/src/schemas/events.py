@@ -10,6 +10,7 @@ class EventSchema(BaseModel):
     places_left: int
     rating: int
     location: dict | list | None
+    poster_path: str | None
 
 
 class EventInfoSchema(BaseModel):
@@ -20,6 +21,7 @@ class EventInfoSchema(BaseModel):
     places_left: int
     rating: int
     location: dict | None
+    poster_path: str | None
 
 
 class EventAddSchema(BaseModel):

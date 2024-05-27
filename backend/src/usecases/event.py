@@ -35,7 +35,7 @@ class EventUseCase(AbstractEventUseCase):
     async def add(self,
                   event: EventAddSchema,
                   user_id: int,
-    ) -> int:
+                  ) -> int:
         async with self.uow:
             if not await UsersService.user_is_moderator(self.uow, user_id):
                 raise AccessForbiddenException
@@ -46,8 +46,8 @@ class EventUseCase(AbstractEventUseCase):
 
     async def delete(self,
                      event_id: int,
-                     user_id:int
-):
+                     user_id: int
+                     ):
         async with self.uow:
             if not await UsersService.user_is_moderator(self.uow, user_id):
                 raise AccessForbiddenException
@@ -55,11 +55,11 @@ class EventUseCase(AbstractEventUseCase):
 
             await self.uow.commit()
 
-    async def update(self,
-                     event_id: int,
-                     user_id: int,
-                     **data
-    ):
+    async def edit_info(self,
+                        event_id: int,
+                        user_id: int,
+                        **data
+                        ):
         async with self.uow:
             if not await UsersService.user_is_moderator(self.uow, user_id):
                 raise AccessForbiddenException

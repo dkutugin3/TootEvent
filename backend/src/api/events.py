@@ -1,9 +1,10 @@
-from fastapi import APIRouter, Depends
+from fastapi import APIRouter, Depends, UploadFile
 
 from schemas.events import EventInfoSchema, EventAddSchema
 from usecases.dependencies import EventCase
 
 from services.auth.dependencies import get_current_user_id
+from utils.file_manager import FileUploader as Fu
 
 
 router = APIRouter(
@@ -48,5 +49,16 @@ async def change_event_info(
     user_id: int = Depends(get_current_user_id),
 ):
 
-    await event_case.update(event_id, user_id, **data)
+    await event_case.edit_info(event_id, user_id, **data)
+    return {"status": "ok"}
+
+
+@router.post("/{event_id}/poster")
+async def upload_poster(
+    event_id: int,
+    poster: UploadFile,
+    event_case: EventCase,
+    user_id: int = Depends(get_current_user_id),
+):
+    await Fu.poster_upload(event_id, poster, event_case, user_id)
     return {"status": "ok"}

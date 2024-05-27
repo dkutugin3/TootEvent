@@ -69,3 +69,7 @@ class UsersService:
     async def user_is_moderator(uow: AbstractUOW, user_id: int) -> bool:
         user = await uow.users.find_one(id=user_id)
         return user.is_moderator
+
+    @staticmethod
+    async def change_user_info(uow: AbstractUOW, user_id: int, **data):
+        await uow.users.update_by_id(user_id, **data)
