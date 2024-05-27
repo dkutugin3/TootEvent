@@ -1,11 +1,10 @@
 import pathlib
 
-from sqlalchemy import String, JSON
-from sqlalchemy.types import DateTime
-from sqlalchemy.orm import Mapped, mapped_column
-from schemas.events import EventSchema
 from db.database import Base
-
+from schemas.events import EventSchema
+from sqlalchemy import JSON, String
+from sqlalchemy.orm import Mapped, mapped_column
+from sqlalchemy.types import DateTime
 from utils.date_manager import DateManager as Dm
 
 

@@ -1,16 +1,13 @@
 from logging.config import fileConfig
 
-from sqlalchemy import engine_from_config
-from sqlalchemy import pool
 from alembic import context
 from config import settings
-
-from models.users import Users
-from models.events import Events
+from db.database import Base
 from models.bookings import Bookings
 from models.checks import Checks
-from db.database import Base
-
+from models.events import Events
+from models.users import Users
+from sqlalchemy import engine_from_config, pool
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.

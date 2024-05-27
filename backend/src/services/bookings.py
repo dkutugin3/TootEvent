@@ -1,21 +1,20 @@
-from pydantic import BaseModel
-
-from schemas.bookings import BookingInfoSchema
-from utils.unit_of_work import AbstractUOW
-from utils.date_manager import DateManager as Dm
-
 from typing import List
+
+from pydantic import BaseModel
+from schemas.bookings import BookingInfoSchema
+from utils.date_manager import DateManager as Dm
+from utils.unit_of_work import AbstractUOW
 
 
 class BookingsService:
     @staticmethod
     async def add_booking(
-            uow: AbstractUOW,
-            event_id: int,
-            user_id: int,
-            check_id: int,
-            number_of_tickets: int,
-            cost: int,
+        uow: AbstractUOW,
+        event_id: int,
+        user_id: int,
+        check_id: int,
+        number_of_tickets: int,
+        cost: int,
     ) -> int:
         booking_id = await uow.bookings.add_one(
             check_id=check_id,
@@ -52,10 +51,15 @@ class BookingsService:
         bookings = await uow.bookings.find_all(is_valid=True, **filter_by)
         for booking in bookings:
             check = await uow.checks.find_one(id=booking.check_id)
-            if (Dm.add(date, minutes=-30) > Dm.string_to_date(check.date)) and (not check.is_payed):
+            if (Dm.add(date, minutes=-30) > Dm.string_to_date(check.date)) and (
+                not check.is_payed
+            ):
                 is_expired = True
                 await uow.bookings.update_by_id(booking.id, is_valid=False)
                 event = await uow.events.find_one(id=booking.event_id)
-                await uow.events.update_by_id(booking.event_id, places_left=(event.places_left+booking.number_of_tickets))
+                await uow.events.update_by_id(
+                    booking.event_id,
+                    places_left=(event.places_left + booking.number_of_tickets),
+                )
 
         return is_expired

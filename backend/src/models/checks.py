@@ -1,9 +1,7 @@
-from sqlalchemy import DateTime, ForeignKey, JSON
-from sqlalchemy.orm import Mapped, mapped_column
-
 from db.database import Base
 from schemas.checks import CheckSchema
-
+from sqlalchemy import JSON, DateTime, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column
 from utils.date_manager import DateManager as Dm
 
 
@@ -24,5 +22,5 @@ class Checks(Base):
             events=self.events,
             date=Dm.date_to_string(self.date),
             total=self.total,
-            is_payed=self.is_payed
+            is_payed=self.is_payed,
         )

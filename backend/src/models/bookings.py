@@ -1,8 +1,7 @@
-from sqlalchemy import DateTime, ForeignKey
-from sqlalchemy.orm import Mapped, mapped_column
-
 from db.database import Base
 from schemas.bookings import BookingSchema
+from sqlalchemy import DateTime, ForeignKey
+from sqlalchemy.orm import Mapped, mapped_column
 
 
 class Bookings(Base):
@@ -24,5 +23,5 @@ class Bookings(Base):
             event_id=self.event_id,
             number_of_tickets=self.number_of_tickets,
             cost=self.cost,
-            is_valid=self.is_valid
+            is_valid=self.is_valid,
         )

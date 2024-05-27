@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 
 from repositories.bookings import BookingsRepo
+from repositories.checks import ChecksRepo
 from repositories.events import EventsRepo
 from repositories.users import UsersRepo
-from repositories.checks import ChecksRepo
 
 
 class AbstractUOW(ABC):

@@ -1,15 +1,13 @@
-from datetime import datetime, UTC
+from datetime import UTC, datetime
 from typing import Annotated
-from utils.unit_of_work import UOW, AbstractUOW
+
+from config import settings
 from fastapi import Depends, Request
 from jose import JWTError, jwt
-from config import settings
-from schemas.exceptions import (
-    IncorrectTokenFormatExcepetion,
-    TokenAbsentException,
-    TokenExpiredException,
-    UserIsNotPresentException,
-)
+from schemas.exceptions import (IncorrectTokenFormatExcepetion,
+                                TokenAbsentException, TokenExpiredException,
+                                UserIsNotPresentException)
+from utils.unit_of_work import UOW, AbstractUOW
 
 
 def get_token(request: Request):
