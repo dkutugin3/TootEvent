@@ -2,8 +2,8 @@ from db.database import async_session_maker
 from domain.utils.unit_of_work import AbstractUOW
 from repositories.bookings import BookingsRepo
 from repositories.checks import ChecksRepo
-from repositories.users import UsersRepo
 from repositories.events import EventsRepo
+from repositories.users import UsersRepo
 
 
 class UOW(AbstractUOW):

@@ -1,7 +1,6 @@
 from models.events import Events
 from repositories.alchemy import SqlAlchemyRepo
 from sqlalchemy import update
-
 from utils.date_manager import DateManager as Dm
 
 

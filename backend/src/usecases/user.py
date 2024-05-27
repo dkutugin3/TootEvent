@@ -1,14 +1,11 @@
+from domain.usecases.user import AbstractUserUseCase
 from fastapi import Depends
-from starlette.responses import Response
-
-from domain.usecases.user import AbstractUserUseCase
-
-from domain.usecases.user import AbstractUserUseCase
-from schemas.auth import UserRegisterSchema, UserLoginSchema, UserInfoSchema
+from schemas.auth import UserInfoSchema, UserLoginSchema, UserRegisterSchema
 from schemas.exceptions import AccessForbiddenException
 from services.auth.dependencies import get_current_user_id
-from utils.dependencies import UOWDep
 from services.users import UsersService
+from starlette.responses import Response
+from utils.dependencies import UOWDep
 
 
 class UserUseCase(AbstractUserUseCase):

@@ -1,11 +1,9 @@
-from pydantic import BaseModel
-
-from schemas.events import EventAddSchema, EventInfoSchema
-from utils.unit_of_work import AbstractUOW
-
 from typing import List
 
+from pydantic import BaseModel
+from schemas.events import EventAddSchema, EventInfoSchema
 from utils.date_manager import DateManager as Dm
+from utils.unit_of_work import AbstractUOW
 
 
 class EventsService:
@@ -44,13 +42,9 @@ class EventsService:
         await uow.events.update_by_id(event_id, **data)
 
     @staticmethod
-    async def change_number_of_places_left(
-        uow: AbstractUOW,
-        event_id: int,
-        delta: int
-    ):
+    async def change_number_of_places_left(uow: AbstractUOW, event_id: int, delta: int):
         event = await uow.events.find_one(id=event_id)
-        await uow.events.update_by_id(event_id, places_left=(event.places_left+delta))
+        await uow.events.update_by_id(event_id, places_left=(event.places_left + delta))
 
     @staticmethod
     async def delete_event(uow: AbstractUOW, event_id: int):

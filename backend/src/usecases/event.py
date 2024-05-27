@@ -1,14 +1,13 @@
 from typing import List
 
-from pydantic import BaseModel
-
 from domain.usecases.event import AbstractEventUseCase
+from pydantic import BaseModel
 from schemas.events import EventAddSchema, EventInfoSchema
 from schemas.exceptions import AccessForbiddenException
 from services.bookings import BookingsService
-from utils.dependencies import UOWDep
 from services.events import EventsService
 from services.users import UsersService
+from utils.dependencies import UOWDep
 
 
 class EventUseCase(AbstractEventUseCase):
@@ -32,10 +31,11 @@ class EventUseCase(AbstractEventUseCase):
 
         return event
 
-    async def add(self,
-                  event: EventAddSchema,
-                  user_id: int,
-                  ) -> int:
+    async def add(
+        self,
+        event: EventAddSchema,
+        user_id: int,
+    ) -> int:
         async with self.uow:
             if not await UsersService.user_is_moderator(self.uow, user_id):
                 raise AccessForbiddenException
@@ -44,10 +44,7 @@ class EventUseCase(AbstractEventUseCase):
             await self.uow.commit()
         return event_id
 
-    async def delete(self,
-                     event_id: int,
-                     user_id: int
-                     ):
+    async def delete(self, event_id: int, user_id: int):
         async with self.uow:
             if not await UsersService.user_is_moderator(self.uow, user_id):
                 raise AccessForbiddenException
@@ -55,11 +52,7 @@ class EventUseCase(AbstractEventUseCase):
 
             await self.uow.commit()
 
-    async def edit_info(self,
-                        event_id: int,
-                        user_id: int,
-                        **data
-                        ):
+    async def edit_info(self, event_id: int, user_id: int, **data):
         async with self.uow:
             if not await UsersService.user_is_moderator(self.uow, user_id):
                 raise AccessForbiddenException

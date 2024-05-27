@@ -21,4 +21,10 @@ class CheckInfoSchema(BaseModel):
 
 
 class CheckAddSchema(BaseModel):
-    events: list | None = Field(examples=[[{"id": 1, "tickets": 0}, ]])
+    events: list | None = Field(
+        examples=[
+            [
+                {"id": 1, "tickets": 0},
+            ]
+        ]
+    )

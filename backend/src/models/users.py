@@ -1,7 +1,7 @@
-from sqlalchemy import String, JSON
-from sqlalchemy.orm import Mapped, mapped_column
-from schemas.users import UserSchema
 from db.database import Base
+from schemas.users import UserSchema
+from sqlalchemy import JSON, String
+from sqlalchemy.orm import Mapped, mapped_column
 
 
 class Users(Base):
@@ -23,5 +23,5 @@ class Users(Base):
             hashed_password=self.hashed_password,
             preferences=self.preferences,
             is_moderator=self.is_moderator,
-            avatar_path=self.avatar_path
+            avatar_path=self.avatar_path,
         )

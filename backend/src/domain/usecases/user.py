@@ -1,8 +1,7 @@
 from abc import ABC, abstractmethod
 
+from schemas.auth import UserInfoSchema, UserLoginSchema, UserRegisterSchema
 from starlette.responses import Response
-
-from schemas.auth import UserRegisterSchema, UserLoginSchema, UserInfoSchema
 
 
 class AbstractUserUseCase(ABC):

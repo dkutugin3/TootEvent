@@ -1,10 +1,9 @@
-from fastapi import APIRouter, Response, Depends
-
-from schemas.auth import UserRegisterSchema, UserLoginSchema, UserInfoSchema
-from usecases.user import UserUseCase
+from fastapi import APIRouter, Depends, Response
+from schemas.auth import UserInfoSchema, UserLoginSchema, UserRegisterSchema
 from services.auth.dependencies import get_current_user_id
-from usecases.dependencies import UserCase, EventCase
 from services.users import UsersService
+from usecases.dependencies import EventCase, UserCase
+from usecases.user import UserUseCase
 
 router = APIRouter(
     prefix="/auth",

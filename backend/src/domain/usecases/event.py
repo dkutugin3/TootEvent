@@ -1,4 +1,5 @@
 from abc import ABC, abstractmethod
+
 from schemas.events import EventAddSchema
 
 

@@ -1,7 +1,6 @@
 import json
 
 import requests
-
 from config import settings
 from domain.usecases.event import AbstractEventUseCase
 from schemas.events import EventAddSchema
@@ -12,15 +11,17 @@ class GigaChatManager:
     async def get_access_token() -> str:
         url = "https://ngw.devices.sberbank.ru:9443/api/v2/oauth"
 
-        payload = 'scope=GIGACHAT_API_PERS'
+        payload = "scope=GIGACHAT_API_PERS"
         headers = {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Accept': 'application/json',
-            'RqUID': f'{settings.CLIENT_SECRET}',
-            'Authorization': f'Basic {settings.AUTH_DATA}'
+            "Content-Type": "application/x-www-form-urlencoded",
+            "Accept": "application/json",
+            "RqUID": f"{settings.CLIENT_SECRET}",
+            "Authorization": f"Basic {settings.AUTH_DATA}",
         }
 
-        response = requests.request("POST", url, headers=headers, data=payload, verify=False)
+        response = requests.request(
+            "POST", url, headers=headers, data=payload, verify=False
+        )
 
         return response.json()["access_token"]
 
@@ -28,12 +29,13 @@ class GigaChatManager:
     async def generate_data():
         url = "https://gigachat.devices.sberbank.ru/api/v1/chat/completions"
         access_token = await GigaChatManager.get_access_token()
-        payload = json.dumps({
-            "model": "GigaChat",
-            "messages": [
-                {
-                    "role": "system",
-                    "content": """
+        payload = json.dumps(
+            {
+                "model": "GigaChat",
+                "messages": [
+                    {
+                        "role": "system",
+                        "content": """
                     Сгенерируй 20 объектов для сущности "массовое мероприятие". Каждый объект должен содержать следующую информацию:
 - title: название мероприятия (строка)
 - price: стоимость билета (число)
@@ -55,23 +57,26 @@ class GigaChatManager:
 - Каждое мероприятие должно иметь уникальное название.
 
 Пожалуйста, создайте разнообразный и реалистичный набор данных. Результат верни в формате JSON без каких - либо пояснений.
-                    """
-                }
-            ],
-            "temperature": 1.25,
-            "top_p": 0.6,
-            "n": 1,
-            "stream": False,
-            "max_tokens": 2048,
-            "repetition_penalty": 1.07
-        })
+                    """,
+                    }
+                ],
+                "temperature": 1.25,
+                "top_p": 0.6,
+                "n": 1,
+                "stream": False,
+                "max_tokens": 2048,
+                "repetition_penalty": 1.07,
+            }
+        )
         headers = {
-            'Content-Type': 'application/json',
-            'Accept': 'application/json',
-            'Authorization': f'Bearer {access_token}'
+            "Content-Type": "application/json",
+            "Accept": "application/json",
+            "Authorization": f"Bearer {access_token}",
         }
 
-        response = requests.request("POST", url, headers=headers, data=payload, verify=False)
+        response = requests.request(
+            "POST", url, headers=headers, data=payload, verify=False
+        )
 
         return response.json()
 
@@ -84,7 +89,7 @@ class GigaChatManager:
     @staticmethod
     async def fill_bd(event_case: AbstractEventUseCase, user_id: int):
         data = await GigaChatManager.generate_data()
-        events = GigaChatManager.validate_json(data["choices"][0]["message"]['content'])
+        events = GigaChatManager.validate_json(data["choices"][0]["message"]["content"])
         events = json.loads(events)
         for event in events:
             try:

@@ -1,11 +1,8 @@
 from fastapi import APIRouter, Depends, UploadFile
-
-from schemas.events import EventInfoSchema, EventAddSchema
-from usecases.dependencies import EventCase
-
+from schemas.events import EventAddSchema, EventInfoSchema
 from services.auth.dependencies import get_current_user_id
+from usecases.dependencies import EventCase
 from utils.file_manager import FileUploader as Fu
-
 
 router = APIRouter(
     prefix="/events",
