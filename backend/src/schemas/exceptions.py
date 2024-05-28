@@ -96,3 +96,8 @@ class NotValidBookingException(BException):
 class BadRequestException(BException):
     status_code = status.HTTP_400_BAD_REQUEST
     detail = "Bad Request"
+
+
+class UserIsAlreadyModeratorException(BException):
+    status_code = status.HTTP_400_BAD_REQUEST
+    detail = "Пользователь уже обладает правами модератора"

@@ -28,3 +28,6 @@ class AbstractUserUseCase(ABC):
 
     @abstractmethod
     async def edit_my_info(self, user_id, **data): ...
+
+    @abstractmethod
+    async def make_moderator(self, user_id, target_user_id): ...

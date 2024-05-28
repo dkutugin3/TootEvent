@@ -59,3 +59,16 @@ class EventUseCase(AbstractEventUseCase):
             await EventsService.change_event_info(self.uow, event_id, **data)
 
             await self.uow.commit()
+
+    async def find_event(self, query: str):
+        parts = query.lower().split()
+        found: List[BaseModel] = []
+        async with self.uow:
+            events = await EventsService.get_events_list(self.uow)
+            for event in events:
+                representation = await EventsService.repr(event)
+                for part in parts:
+                    if part in representation:
+                        found.append(event)
+                        break
+        return found
