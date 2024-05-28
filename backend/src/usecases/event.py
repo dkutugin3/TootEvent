@@ -1,7 +1,8 @@
 from typing import List
 
-from domain.usecases.event import AbstractEventUseCase
 from pydantic import BaseModel
+
+from domain.usecases.event import AbstractEventUseCase
 from schemas.events import EventAddSchema, EventInfoSchema
 from schemas.exceptions import AccessForbiddenException
 from services.bookings import BookingsService

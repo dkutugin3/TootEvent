@@ -1,9 +1,10 @@
 import datetime
 from typing import List
 
+from pydantic import BaseModel
+
 from domain.usecases.booking import AbstractBookingUseCase
 from domain.utils.unit_of_work import AbstractUOW
-from pydantic import BaseModel
 from schemas.bookings import BookingInfoSchema
 from schemas.exceptions import (AccessForbiddenException,
                                 CheckIsNotPayedException,

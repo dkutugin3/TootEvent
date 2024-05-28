@@ -3,12 +3,10 @@ from typing import List
 
 from fastapi import APIRouter, Depends, UploadFile
 
-from schemas.events import EventInfoSchema, EventAddSchema
-from usecases.dependencies import EventCase, UserCase
-
+from schemas.events import EventAddSchema, EventInfoSchema
 from services.auth.dependencies import get_current_user_id
+from usecases.dependencies import EventCase, UserCase
 from utils.file_manager import FileUploader as Fu
-
 
 router = APIRouter(
     prefix="/events",
@@ -91,8 +89,8 @@ async def get_all(
 
 @router.get("/search/{query}")
 async def find(
-        query: str,
-        event_case: EventCase,
+    query: str,
+    event_case: EventCase,
 ):
     events = await event_case.find_event(query)
     return events

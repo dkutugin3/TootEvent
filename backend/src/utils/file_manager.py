@@ -4,17 +4,15 @@ from fastapi import UploadFile
 
 from domain.usecases.event import AbstractEventUseCase
 from domain.usecases.user import AbstractUserUseCase
-from schemas.exceptions import BadFileException, AccessForbiddenException, BadRequestException
+from schemas.exceptions import (AccessForbiddenException, BadFileException,
+                                BadRequestException)
 from usecases.dependencies import UserCase
 
 
 class FileUploader:
     @staticmethod
     async def poster_upload(
-            event_id: int,
-            poster: UploadFile,
-            user_case: AbstractUserUseCase,
-            user_id: int
+        event_id: int, poster: UploadFile, user_case: AbstractUserUseCase, user_id: int
     ):
         if not await user_case.is_moderator(user_id):
             raise AccessForbiddenException
@@ -25,10 +23,7 @@ class FileUploader:
             file.write(await poster.read())
 
     @staticmethod
-    async def my_avatar_upload(
-            avatar: UploadFile,
-            user_id: int
-    ):
+    async def my_avatar_upload(avatar: UploadFile, user_id: int):
         if avatar.content_type != "image/jpeg":
             raise BadFileException
         with open(f"../resources/avatars/avatar_{user_id}.jpeg", "wb") as file:
@@ -37,19 +32,19 @@ class FileUploader:
     @staticmethod
     async def get_poster(event_id: int) -> bytes:
         if os.path.exists(f"../resources/posters/poster_{event_id}.jpeg"):
-            with open(f"../resources/posters/poster_{event_id}.jpeg", 'rb') as file:
+            with open(f"../resources/posters/poster_{event_id}.jpeg", "rb") as file:
                 return file.read()
         else:
-            with open(f"../resources/posters/poster_default.jpeg", 'rb') as file:
+            with open(f"../resources/posters/poster_default.jpeg", "rb") as file:
                 return file.read()
 
     @staticmethod
     async def get_my_avatar(user_id: int) -> bytes:
         if os.path.exists(f"../resources/avatars/avatar_{user_id}.jpeg"):
-            with open(f"../resources/avatars/avatar_{user_id}.jpeg", 'rb') as file:
+            with open(f"../resources/avatars/avatar_{user_id}.jpeg", "rb") as file:
                 return file.read()
         else:
-            with open(f"../resources/avatars/avatar_default.jpeg", 'rb') as file:
+            with open(f"../resources/avatars/avatar_default.jpeg", "rb") as file:
                 return file.read()
 
     @staticmethod
@@ -60,7 +55,9 @@ class FileUploader:
             raise BadRequestException
 
     @staticmethod
-    async def delete_poster(event_id: int, user_case: AbstractUserUseCase, user_id: int):
+    async def delete_poster(
+        event_id: int, user_case: AbstractUserUseCase, user_id: int
+    ):
         if not await user_case.is_moderator(user_id):
             raise AccessForbiddenException
 

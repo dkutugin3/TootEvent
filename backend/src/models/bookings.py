@@ -1,7 +1,8 @@
-from db.database import Base
-from schemas.bookings import BookingSchema
 from sqlalchemy import DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
+
+from db.database import Base
+from schemas.bookings import BookingSchema
 
 
 class Bookings(Base):

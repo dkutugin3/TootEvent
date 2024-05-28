@@ -1,9 +1,10 @@
 from datetime import UTC, datetime
 from typing import Annotated
 
-from config import settings
 from fastapi import Depends, Request
 from jose import JWTError, jwt
+
+from config import settings
 from schemas.exceptions import (IncorrectTokenFormatExcepetion,
                                 TokenAbsentException, TokenExpiredException,
                                 UserIsNotPresentException)

@@ -1,7 +1,8 @@
+from sqlalchemy import update
+
 from models.users import Users
 from repositories.alchemy import SqlAlchemyRepo
 from schemas.users import UserSchema
-from sqlalchemy import update
 
 
 class UsersRepo(SqlAlchemyRepo):

@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends, Response
+
 from schemas.auth import UserInfoSchema, UserLoginSchema, UserRegisterSchema
 from services.auth.dependencies import get_current_user_id
 from services.users import UsersService

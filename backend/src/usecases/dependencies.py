@@ -1,10 +1,11 @@
 from typing import Annotated
 
+from fastapi import Depends
+
 from domain.usecases.booking import AbstractBookingUseCase
 from domain.usecases.check import AbstractCheckUseCase
 from domain.usecases.event import AbstractEventUseCase
 from domain.usecases.user import AbstractUserUseCase
-from fastapi import Depends
 from usecases.booking import BookingUseCase
 from usecases.check import CheckUseCase
 from usecases.event import EventUseCase

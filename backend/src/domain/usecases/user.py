@@ -1,11 +1,13 @@
 from abc import ABC, abstractmethod
 
-from schemas.auth import UserInfoSchema, UserLoginSchema, UserRegisterSchema
 from starlette.responses import Response
+
+from schemas.auth import UserInfoSchema, UserLoginSchema, UserRegisterSchema
 
 
 class AbstractUserUseCase(ABC):
     """Class for interaction with users"""
+
     @abstractmethod
     async def registrate(self, user: UserRegisterSchema, response: Response): ...
 

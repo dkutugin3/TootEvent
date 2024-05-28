@@ -5,6 +5,7 @@ from schemas.events import EventAddSchema
 
 class AbstractEventUseCase(ABC):
     """Class for interaction with events"""
+
     @abstractmethod
     async def add(self, event: EventAddSchema, user_id: int): ...
 

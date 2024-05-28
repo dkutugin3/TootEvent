@@ -1,9 +1,10 @@
 from datetime import UTC, datetime, timedelta
 
-from config import settings
 from jose import jwt
 from passlib.context import CryptContext
 from pydantic import EmailStr
+
+from config import settings
 from repositories.users import UsersRepo
 
 pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")

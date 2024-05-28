@@ -1,4 +1,5 @@
 from fastapi import APIRouter, Depends
+
 from services.auth.dependencies import get_current_user_id
 from services.generate import GigaChatManager
 from usecases.dependencies import EventCase

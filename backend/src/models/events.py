@@ -1,10 +1,11 @@
 import pathlib
 
-from db.database import Base
-from schemas.events import EventSchema
 from sqlalchemy import JSON, String
 from sqlalchemy.orm import Mapped, mapped_column
 from sqlalchemy.types import DateTime
+
+from db.database import Base
+from schemas.events import EventSchema
 from utils.date_manager import DateManager as Dm
 
 
@@ -31,5 +32,5 @@ class Events(Base):
             places_left=self.places_left,
             rating=self.rating,
             city=self.city,
-            place=self.place
+            place=self.place,
         )

@@ -1,9 +1,10 @@
 from typing import List
 
-from domain.repositories.base import AbstractRepo
 from pydantic import BaseModel
 from sqlalchemy import delete, insert, select, update
 from sqlalchemy.ext.asyncio import AsyncSession
+
+from domain.repositories.base import AbstractRepo
 
 
 class SqlAlchemyRepo(AbstractRepo):

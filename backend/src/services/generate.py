@@ -1,6 +1,7 @@
 import json
 
 import requests
+
 from config import settings
 from domain.usecases.event import AbstractEventUseCase
 from schemas.events import EventAddSchema

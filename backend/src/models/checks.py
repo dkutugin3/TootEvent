@@ -1,7 +1,8 @@
-from db.database import Base
-from schemas.checks import CheckSchema
 from sqlalchemy import JSON, DateTime, ForeignKey
 from sqlalchemy.orm import Mapped, mapped_column
+
+from db.database import Base
+from schemas.checks import CheckSchema
 from utils.date_manager import DateManager as Dm
 
 
