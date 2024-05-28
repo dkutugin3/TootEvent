@@ -62,4 +62,4 @@ class BookingsService:
                     places_left=(event.places_left + booking.number_of_tickets),
                 )
 
-        return is_expired
+        return False

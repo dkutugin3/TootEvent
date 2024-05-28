@@ -33,8 +33,6 @@ class CheckUseCase(AbstractCheckUseCase):
 
                 if event.places_left < number_of_tickets:
                     raise NotEnoughPlacesLeftException
-                if Dm.add(date, hours=2) > Dm.string_to_date(event.date):
-                    raise EventAlreadyStartedException
 
                 cost += number_of_tickets * event.price
                 await EventsService.change_number_of_places_left(

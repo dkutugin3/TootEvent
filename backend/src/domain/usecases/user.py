@@ -5,7 +5,7 @@ from starlette.responses import Response
 
 
 class AbstractUserUseCase(ABC):
-
+    """Class for interaction with users"""
     @abstractmethod
     async def registrate(self, user: UserRegisterSchema, response: Response): ...
 

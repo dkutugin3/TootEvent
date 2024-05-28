@@ -4,6 +4,7 @@ from schemas.checks import CheckAddSchema
 
 
 class AbstractCheckUseCase(ABC):
+    """Class for interaction with checks"""
     @abstractmethod
     async def create(self, user_id: int, data: CheckAddSchema): ...
 

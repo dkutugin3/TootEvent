@@ -35,7 +35,7 @@ async def get_bookings_list_by_user_id(
     return await booking_case.get_list_by_user(target_user_id, user_id)
 
 
-@router.get("/my")
+@router.get("/my/get")
 async def get_bookings_list_by_current_user_id(
     booking_case: BookingCase,
     user_id: int = Depends(get_current_user_id),

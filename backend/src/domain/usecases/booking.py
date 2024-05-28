@@ -2,7 +2,7 @@ from abc import ABC, abstractmethod
 
 
 class AbstractBookingUseCase(ABC):
-
+    """Class for interaction with bookings"""
     @abstractmethod
     async def refund(self, booking_id: int, user_id: int, card: int): ...
 

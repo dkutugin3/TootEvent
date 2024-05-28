@@ -35,12 +35,6 @@ class BookingUseCase(AbstractBookingUseCase):
             if not check.is_payed:
                 raise CheckIsNotPayedException
 
-            event_date = Dm.string_to_date(
-                (await EventsService.get_event_info(self.uow, booking.event_id)).date
-            )
-            if date > Dm.add(event_date, days=-2):
-                raise RefundDeclinedException
-
             await BookingsService.update_booking_info(
                 self.uow, booking_id, is_valid=False
             )
