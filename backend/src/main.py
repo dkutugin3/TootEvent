@@ -6,7 +6,7 @@ from starlette.middleware.cors import CORSMiddleware
 app = FastAPI(title="TootEvent")
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["http://127.0.0.1:5500"],
+    allow_origins=["http://127.0.0.1:5500", "http://0.0.0.0:5500", "*"],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
